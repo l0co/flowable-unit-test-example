@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn"
+			 xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC"
+			 xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema"
+			 expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="IsUserActive" name="IsUserActive" isExecutable="true">
+    <startEvent id="startEvent" name="Start"></startEvent>
+    <serviceTask id="checkUserExists" name="Check user exists" activiti:expression="#{isUserActiveServiceTask.checkUserExists(userId)}"></serviceTask>
+    <serviceTask id="isUserActive" name="Check user is active" activiti:expression="#{isUserActiveServiceTask.isUserActive(userId)}" activiti:resultVariableName="result"></serviceTask>
+    <endEvent id="endEvent" name="End"></endEvent>
+    <boundaryEvent id="userNotExistsBoundaryErrorEvent" name="Error" attachedToRef="checkUserExists">
+      <errorEventDefinition errorRef="ERR_USER_NOT_EXIST"></errorEventDefinition>
+    </boundaryEvent>
+    <endEvent id="userNotExistsErrorEndEvent" name="ERR_USER_NOT_EXIST">
+      <errorEventDefinition errorRef="ERR_USER_NOT_EXIST"></errorEventDefinition>
+    </endEvent>
+    <sequenceFlow id="flow1" sourceRef="startEvent" targetRef="checkUserExists"></sequenceFlow>
+    <sequenceFlow id="flow2" sourceRef="checkUserExists" targetRef="isUserActive"></sequenceFlow>
+    <sequenceFlow id="flow3" sourceRef="isUserActive" targetRef="endEvent"></sequenceFlow>
+    <sequenceFlow id="flow4" name="user doesn't exist" sourceRef="userNotExistsBoundaryErrorEvent" targetRef="userNotExistsErrorEndEvent"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_IsUserActive">
+    <bpmndi:BPMNPlane bpmnElement="IsUserActive" id="BPMNPlane_IsUserActive">
+      <bpmndi:BPMNShape bpmnElement="startEvent" id="BPMNShape_startEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="200.0" y="330.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="checkUserExists" id="BPMNShape_checkUserExists">
+        <omgdc:Bounds height="55.0" width="125.0" x="320.0" y="320.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="userNotExistsBoundaryErrorEvent" id="BPMNShape_userNotExistsBoundaryErrorEvent">
+        <omgdc:Bounds height="30.0" width="30.0" x="420.0" y="364.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="isUserActive" id="BPMNShape_isUserActive">
+        <omgdc:Bounds height="55.0" width="125.0" x="520.0" y="320.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endEvent" id="BPMNShape_endEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="710.0" y="330.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="userNotExistsErrorEndEvent" id="BPMNShape_userNotExistsErrorEndEvent">
+        <omgdc:Bounds height="35.0" width="35.0" x="417.0" y="460.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="235.0" y="347.0"></omgdi:waypoint>
+        <omgdi:waypoint x="320.0" y="347.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="445.0" y="347.0"></omgdi:waypoint>
+        <omgdi:waypoint x="520.0" y="347.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="645.0" y="347.0"></omgdi:waypoint>
+        <omgdi:waypoint x="710.0" y="347.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="435.0" y="394.0"></omgdi:waypoint>
+        <omgdi:waypoint x="434.0" y="460.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="12.0" width="100.0" x="398.0" y="419.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

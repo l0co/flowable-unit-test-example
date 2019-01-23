@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
  *
  * @author Lukasz Frankowski
  */
-@Component
+@Component(BanUserServiceTask.BEAN_NAME)
 class BanUserServiceTask @Autowired constructor(
     val userService: UserService
 ) {
@@ -20,7 +20,9 @@ class BanUserServiceTask @Autowired constructor(
 
     companion object {
 
+        const val BEAN_NAME = "banUserServiceTask" // bean name
         const val VAR_USER_ID = "userId" // process variable
+        const val ERR_USER_BAN = "ERR_USER_BAN" // bpmn error code
 
     }
 

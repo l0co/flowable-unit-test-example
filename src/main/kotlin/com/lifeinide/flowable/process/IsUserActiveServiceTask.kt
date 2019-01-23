@@ -1,6 +1,7 @@
 package com.lifeinide.flowable.process
 
 import com.lifeinide.flowable.service.UserService
+import org.flowable.engine.delegate.BpmnError
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
@@ -9,16 +10,17 @@ import org.springframework.stereotype.Component
  *
  * @author Lukasz Frankowski
  */
-@Component
+@Component(IsUserActiveServiceTask.BEAN_NAME)
 class IsUserActiveServiceTask @Autowired constructor(
     val userService: UserService
 ) {
 
-    fun userExists(userId: String): Boolean {
-        return userService.findUser(userId) != null
+    fun checkUserExists(userId: String) {
+        if (userService.findUser(userId) == null)
+            throw BpmnError(ERR_USER_NOT_EXIST)
     }
 
-    fun userIsActive(userId: String): Boolean {
+    fun isUserActive(userId: String): Boolean {
         userService.findUser(userId)?.let {
             return !userService.isBanned(it)
         }
@@ -28,7 +30,10 @@ class IsUserActiveServiceTask @Autowired constructor(
 
     companion object {
 
+        const val BEAN_NAME = "isUserActiveServiceTask" // service task bean name
         const val VAR_USER_ID = "userId" // process variable
+        const val VAR_RESULT = "result" // process variable
+        const val ERR_USER_NOT_EXIST = "ERR_USER_NOT_EXIST" // bpmn error code
 
     }
 
