@@ -32,7 +32,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-reflect"
     runtimeOnly 'com.h2database:h2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    compile 'org.flowable:flowable-spring-boot-starter:6.4.1'
+    compile 'org.flowable:flowable-spring-boot-starter-process:6.4.1'
 }
 
 compileKotlin {
