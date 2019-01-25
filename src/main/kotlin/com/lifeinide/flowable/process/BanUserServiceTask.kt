@@ -20,6 +20,7 @@ class BanUserServiceTask @Autowired constructor(
 
     companion object {
 
+        const val PROCESS_NAME = "BanUser" // process name
         const val BEAN_NAME = "banUserServiceTask" // bean name
         const val VAR_USER_ID = "userId" // process variable
         const val ERR_USER_BAN = "ERR_USER_BAN" // bpmn error code

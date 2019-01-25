@@ -30,6 +30,7 @@ class IsUserActiveServiceTask @Autowired constructor(
 
     companion object {
 
+        const val PROCESS_NAME = "IsUserActive" // process name
         const val BEAN_NAME = "isUserActiveServiceTask" // service task bean name
         const val VAR_USER_ID = "userId" // process variable
         const val VAR_RESULT = "result" // process variable
