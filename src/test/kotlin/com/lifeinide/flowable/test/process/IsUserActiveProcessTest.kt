@@ -9,18 +9,18 @@ import org.junit.Test
 class IsUserActiveProcessTest: BaseProcessTest() {
 
     @Test
-    fun testUserNotExist() {
-        // TODOLF implement me
+    fun testUserNotExists() {
+        print("Hello from test user not exists") // TODOLF implement me
     }
 
     @Test
     fun testUserActive() {
-        // TODOLF implement me
+        print("Hello from test user active") // TODOLF implement me
     }
 
     @Test
     fun testUserInactive() {
-        // TODOLF implement me
+        print("Hello from test user inactive") // TODOLF implement me
     }
 
 }
