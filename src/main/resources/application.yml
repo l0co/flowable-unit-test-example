@@ -1,0 +1,8 @@
+app:
+  name: Flowable Test
+  description: Example of testing Flowable processes with Spring Boot + JUnit
+
+logging:
+  level:
+    com:
+      lifeinide: DEBUG
