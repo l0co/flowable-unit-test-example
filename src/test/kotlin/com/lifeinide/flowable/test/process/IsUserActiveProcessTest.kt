@@ -8,6 +8,8 @@ import org.flowable.engine.test.mock.Mocks
 import org.junit.Test
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * @author Lukasz Frankowski
@@ -37,6 +39,10 @@ class IsUserActiveProcessTest: BaseProcessTest() {
     @Test
     fun testUserInactive() {
         print("Hello from test user inactive") // TODOLF implement me
+    }
+
+    companion object {
+        @JvmStatic val logger: Logger = LoggerFactory.getLogger(IsUserActiveProcessTest::class.java)
     }
 
 }

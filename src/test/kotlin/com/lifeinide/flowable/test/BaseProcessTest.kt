@@ -3,6 +3,8 @@ package com.lifeinide.flowable.test
 import org.flowable.engine.RuntimeService
 import org.flowable.engine.test.mock.Mocks
 import org.junit.AfterClass
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 
 /**
@@ -20,8 +22,11 @@ abstract class BaseProcessTest: BaseSpringTest() {
 
     companion object {
 
+        @JvmStatic val logger: Logger = LoggerFactory.getLogger(BaseProcessTest::class.java)
+
         @AfterClass @JvmStatic
         fun tearDown() {
+            logger.debug("Unregistering mocks")
             Mocks.reset()
         }
 

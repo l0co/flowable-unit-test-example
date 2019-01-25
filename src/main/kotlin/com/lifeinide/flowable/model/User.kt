@@ -14,4 +14,8 @@ class User(val id: String): Serializable {
 
     var banned = false
 
+    override fun toString(): String {
+        return "User(id='$id', banned=$banned)"
+    }
+
 }
