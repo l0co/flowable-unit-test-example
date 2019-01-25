@@ -12,7 +12,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
 
-
 /**
  * @author Lukasz Frankowski
  */
@@ -38,7 +37,6 @@ class FlowableTestApplication {
     companion object {
         @JvmStatic val logger: Logger = LoggerFactory.getLogger(FlowableTestApplication::class.java)
     }
-
 
 }
 
