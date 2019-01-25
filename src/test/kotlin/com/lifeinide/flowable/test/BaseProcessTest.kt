@@ -3,14 +3,19 @@ package com.lifeinide.flowable.test
 import org.flowable.engine.RuntimeService
 import org.flowable.engine.test.mock.Mocks
 import org.junit.AfterClass
+import org.junit.runner.RunWith
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.junit4.SpringRunner
 
 /**
  * @author Lukasz Frankowski
  */
-abstract class BaseProcessTest: BaseSpringTest() {
+@RunWith(SpringRunner::class)
+@SpringBootTest
+abstract class BaseProcessTest {
 
     @Autowired protected lateinit var runtimeService: RuntimeService
 
