@@ -6,6 +6,7 @@ import com.lifeinide.flowable.service.UserService
 import com.lifeinide.flowable.test.BaseProcessTest
 import org.flowable.engine.test.mock.Mocks
 import org.junit.Test
+import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.slf4j.Logger
@@ -18,27 +19,42 @@ class IsUserActiveProcessTest: BaseProcessTest() {
 
     override fun processName(): String = IsUserActiveServiceTask.PROCESS_NAME
 
-    @Test
-    fun testUserNotExists() {
-        print("Hello from test user not exists") // TODOLF implement me
+    protected fun prepareEnvAndStartProcess(userExists: Boolean = true, userIsActive: Boolean = true) {
+        val mockUserService: UserService
+        val mockUser = User()
+
+        if (userExists) {
+
+            mockUserService = mock(UserService::class.java)
+            `when`(mockUserService.findUser(mockUser.id)).thenReturn(mockUser)
+            `when`(mockUserService.isBanned(mockUser)).thenReturn(!userIsActive)
+
+        } else {
+
+            mockUserService = mock(UserService::class.java)
+            `when`(mockUserService.findUser(ArgumentMatchers.any())).thenReturn(null)
+
+        }
+
+        Mocks.register(IsUserActiveServiceTask.BEAN_NAME, IsUserActiveServiceTask(mockUserService))
+        startProcess(mapOf(IsUserActiveServiceTask.VAR_USER_ID to mockUser.id))
     }
+
+//    @Test
+//    fun testUserNotExists() {
+//        logger.debug("testUserNotExists()") // TODOLF implement me
+//    }
 
     @Test
     fun testUserActive() {
-        print("Hello from test user active") // TODOLF implement me
-
-        val mockUser = User()
-        val mockUserService = mock(UserService::class.java)
-        `when`(mockUserService.findUser(mockUser.id)).thenReturn(mockUser)
-        val mockServiceTask = IsUserActiveServiceTask(mockUserService)
-        Mocks.register(IsUserActiveServiceTask.BEAN_NAME, mockServiceTask)
-
-        startProcess(mapOf(IsUserActiveServiceTask.VAR_USER_ID to mockUser.id))
+        logger.debug("testUserActive()") // TODOLF implement me
+        prepareEnvAndStartProcess(userIsActive = true)
     }
 
     @Test
     fun testUserInactive() {
-        print("Hello from test user inactive") // TODOLF implement me
+        logger.debug("testUserInactive()") // TODOLF implement me
+        prepareEnvAndStartProcess(userIsActive = false)
     }
 
     companion object {
