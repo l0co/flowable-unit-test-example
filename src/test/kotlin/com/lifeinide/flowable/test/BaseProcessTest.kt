@@ -2,7 +2,7 @@ package com.lifeinide.flowable.test
 
 import org.flowable.engine.RuntimeService
 import org.flowable.engine.test.mock.Mocks
-import org.junit.AfterClass
+import org.junit.After
 import org.junit.runner.RunWith
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -22,18 +22,19 @@ abstract class BaseProcessTest {
     abstract fun processName(): String
 
     fun startProcess(variables: Map<String, Any> = mapOf()) {
+        logger.debug("Starting process: ${processName()}")
         runtimeService.startProcessInstanceByKey(processName(), variables)
+    }
+
+    @After
+    fun tearDown() {
+        logger.debug("Unregistering mocks")
+        Mocks.reset()
     }
 
     companion object {
 
         @JvmStatic val logger: Logger = LoggerFactory.getLogger(BaseProcessTest::class.java)
-
-        @AfterClass @JvmStatic
-        fun tearDown() {
-            logger.debug("Unregistering mocks")
-            Mocks.reset()
-        }
 
     }
 
