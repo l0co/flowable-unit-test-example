@@ -4,6 +4,7 @@ import com.lifeinide.flowable.model.User
 import com.lifeinide.flowable.process.IsUserActiveServiceTask
 import com.lifeinide.flowable.service.UserService
 import com.lifeinide.flowable.test.BaseProcessTest
+import com.lifeinide.flowable.test.ProcessAssertions
 import org.flowable.engine.test.mock.Mocks
 import org.junit.Test
 import org.mockito.ArgumentMatchers
@@ -19,7 +20,7 @@ class IsUserActiveProcessTest: BaseProcessTest() {
 
     override fun processName(): String = IsUserActiveServiceTask.PROCESS_NAME
 
-    protected fun prepareEnvAndStartProcess(userExists: Boolean = true, userIsActive: Boolean = true) {
+    protected fun prepareEnvAndStartProcess(userExists: Boolean = true, userIsActive: Boolean = true): ProcessAssertions {
         val mockUserService: UserService
         val mockUser = User()
 
@@ -37,7 +38,7 @@ class IsUserActiveProcessTest: BaseProcessTest() {
         }
 
         Mocks.register(IsUserActiveServiceTask.BEAN_NAME, IsUserActiveServiceTask(mockUserService))
-        startProcess(mapOf(IsUserActiveServiceTask.VAR_USER_ID to mockUser.id))
+        return startProcess(mapOf(IsUserActiveServiceTask.VAR_USER_ID to mockUser.id))
     }
 
 //    @Test
@@ -47,14 +48,22 @@ class IsUserActiveProcessTest: BaseProcessTest() {
 
     @Test
     fun testUserActive() {
-        logger.debug("testUserActive()") // TODOLF implement me
-        prepareEnvAndStartProcess(userIsActive = true)
+        logger.debug("testUserActive()")
+        with (prepareEnvAndStartProcess(userIsActive = true)) {
+            assertActivityCompleted("checkUserExists")
+            assertActivityCompleted("isUserActive")
+            assertVariable(IsUserActiveServiceTask.VAR_RESULT, true)
+        }
     }
 
     @Test
     fun testUserInactive() {
-        logger.debug("testUserInactive()") // TODOLF implement me
-        prepareEnvAndStartProcess(userIsActive = false)
+        logger.debug("testUserInactive()")
+        with (prepareEnvAndStartProcess(userIsActive = true)) {
+            assertActivityCompleted("checkUserExists")
+            assertActivityCompleted("isUserActive")
+            assertVariable(IsUserActiveServiceTask.VAR_RESULT, false)
+        }
     }
 
     companion object {

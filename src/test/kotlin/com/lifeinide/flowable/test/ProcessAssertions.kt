@@ -25,7 +25,7 @@ class ProcessAssertions(protected val processTestEnvironment: ProcessTestEnviron
      **/
     fun assertActivityStarted(name: String, started: Boolean = true) {
         val events = processTestEnvironment.events.filter {
-            it[ProcessTestEnvironment.FIELD_TYPE] == FlowableEngineEventType.ACTIVITY_STARTED.name && it[Fields.ACTIVITY_NAME] == name
+            it[ProcessTestEnvironment.FIELD_TYPE] == FlowableEngineEventType.ACTIVITY_STARTED.name && it[Fields.ACTIVITY_ID] == name
         }
 
         assertThat(events)
@@ -40,7 +40,7 @@ class ProcessAssertions(protected val processTestEnvironment: ProcessTestEnviron
      **/
     fun assertActivityCompleted(name: String, completed: Boolean = true) {
         val events = processTestEnvironment.events.filter {
-            it[ProcessTestEnvironment.FIELD_TYPE] == FlowableEngineEventType.ACTIVITY_COMPLETED.name && it[Fields.ACTIVITY_NAME] == name
+            it[ProcessTestEnvironment.FIELD_TYPE] == FlowableEngineEventType.ACTIVITY_COMPLETED.name && it[Fields.ACTIVITY_ID] == name
         }
 
         assertThat(events)
