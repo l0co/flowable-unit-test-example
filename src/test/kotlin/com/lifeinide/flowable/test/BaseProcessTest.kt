@@ -21,9 +21,21 @@ abstract class BaseProcessTest {
 
     abstract fun processName(): String
 
-    fun startProcess(variables: Map<String, Any> = mapOf()) {
+    fun startProcess(variables: Map<String, Any> = mapOf()): ProcessAssertions {
         logger.debug("Starting process: ${processName()}")
-        runtimeService.startProcessInstanceByKey(processName(), variables)
+
+        val processTestEnvironment = ProcessTestEnvironment()
+        runtimeService.addEventListener(processTestEnvironment)
+
+        try {
+            runtimeService.startProcessInstanceByKey(processName(), variables)
+        } catch(e: Throwable) {
+            processTestEnvironment.exception = e
+        } finally {
+            runtimeService.removeEventListener(processTestEnvironment)
+        }
+
+        return ProcessAssertions(processTestEnvironment) // TODOLF continue here
     }
 
     @After
