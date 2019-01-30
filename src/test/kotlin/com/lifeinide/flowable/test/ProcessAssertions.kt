@@ -3,6 +3,7 @@ package com.lifeinide.flowable.test
 import org.assertj.core.api.Assertions.assertThat
 import org.flowable.common.engine.api.delegate.event.FlowableEngineEventType
 import org.flowable.engine.impl.event.logger.handler.Fields
+import org.flowable.variable.service.impl.persistence.entity.VariableScopeImpl
 import kotlin.reflect.KClass
 
 /**
@@ -16,7 +17,7 @@ class ProcessAssertions(protected val processTestEnvironment: ProcessTestEnviron
      * Checks whether the process variable is set
      **/
     fun assertVariable(name: String, value: Any) {
-        assertThat(processTestEnvironment.processInstance!!.processVariables[name]).isEqualTo(value)
+        assertThat((processTestEnvironment.processInstance as VariableScopeImpl).getVariable(name)).isEqualTo(value)
     }
 
     /**

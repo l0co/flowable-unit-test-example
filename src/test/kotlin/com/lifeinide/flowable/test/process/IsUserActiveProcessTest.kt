@@ -59,7 +59,7 @@ class IsUserActiveProcessTest: BaseProcessTest() {
     @Test
     fun testUserInactive() {
         logger.debug("testUserInactive()")
-        with (prepareEnvAndStartProcess(userIsActive = true)) {
+        with (prepareEnvAndStartProcess(userIsActive = false)) {
             assertActivityCompleted("checkUserExists")
             assertActivityCompleted("isUserActive")
             assertVariable(IsUserActiveServiceTask.VAR_RESULT, false)
