@@ -11,22 +11,16 @@ import org.springframework.stereotype.Service
 @Service
 class UserService {
 
-    private val userRepository: MutableMap<String, User> = mutableMapOf()
-
     fun findUser(id: String): User? {
-        return userRepository[id]
-    }
-
-    fun saveUser(user: User) {
-        userRepository[user.id] = user
+        throw NotImplementedError()
     }
 
     fun isBanned(user: User): Boolean {
-        return user.banned
+        throw NotImplementedError()
     }
 
     fun ban(user: User) {
-        user.banned = true
+        throw NotImplementedError()
     }
 
 }
