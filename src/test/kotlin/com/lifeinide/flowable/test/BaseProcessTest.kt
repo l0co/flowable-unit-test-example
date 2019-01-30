@@ -35,7 +35,7 @@ abstract class BaseProcessTest {
             runtimeService.removeEventListener(processTestEnvironment)
         }
 
-        return ProcessAssertions(processTestEnvironment) // TODOLF continue here
+        return ProcessAssertions(processTestEnvironment)
     }
 
     @After
