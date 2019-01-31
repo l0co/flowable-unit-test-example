@@ -20,6 +20,7 @@ class BanUserServiceTask @Autowired constructor(
         userService.findUser(userId)?.let {
             logger.debug("Banning user: $it")
             userService.ban(it)
+            return
         }
 
         throw IllegalStateException() // shouldn't ever happen in the process
