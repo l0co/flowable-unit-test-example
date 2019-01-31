@@ -54,7 +54,7 @@ class ProcessAssertions(protected val processTestEnvironment: ProcessTestEnviron
     /**
      * Checks whether process ended with the exception of given class.
      */
-    fun assertException(clazz: KClass<Throwable>) {
+    fun assertException(clazz: KClass<out Throwable>) {
         assertThat(processTestEnvironment.exception)
             .withFailMessage("Process hasn't ended with exception")
             .isNotNull()

@@ -5,6 +5,7 @@ import com.lifeinide.flowable.process.IsUserActiveServiceTask
 import com.lifeinide.flowable.service.UserService
 import com.lifeinide.flowable.test.BaseProcessTest
 import com.lifeinide.flowable.test.ProcessAssertions
+import org.flowable.common.engine.api.FlowableException
 import org.flowable.engine.test.mock.Mocks
 import org.junit.Test
 import org.mockito.ArgumentMatchers
@@ -21,19 +22,17 @@ class IsUserActiveProcessTest: BaseProcessTest() {
     override fun processName(): String = IsUserActiveServiceTask.PROCESS_NAME
 
     protected fun prepareEnvAndStartProcess(userExists: Boolean = true, userIsActive: Boolean = true): ProcessAssertions {
-        val mockUserService: UserService
+        val mockUserService = mock(UserService::class.java)
         val mockUser = User()
 
         if (userExists) {
 
-            mockUserService = mock(UserService::class.java)
             `when`(mockUserService.findUser(mockUser.id)).thenReturn(mockUser)
             `when`(mockUserService.isBanned(mockUser)).thenReturn(!userIsActive)
 
         } else {
 
-            mockUserService = mock(UserService::class.java)
-            `when`(mockUserService.findUser(ArgumentMatchers.any())).thenReturn(null)
+            `when`(mockUserService.findUser(ArgumentMatchers.anyString())).thenReturn(null)
 
         }
 
@@ -41,10 +40,15 @@ class IsUserActiveProcessTest: BaseProcessTest() {
         return startProcess(mapOf(IsUserActiveServiceTask.VAR_USER_ID to mockUser.id))
     }
 
-//    @Test
-//    fun testUserNotExists() {
-//        logger.debug("testUserNotExists()") // TODOLF implement me
-//    }
+    @Test
+    fun testUserNotExists() {
+        logger.debug("testUserNotExists()")
+        with (prepareEnvAndStartProcess(userExists = false)) {
+            assertActivityStarted("checkUserExists")
+            assertActivityNotCompleted("checkUserExists")
+            assertException(FlowableException::class)
+        }
+    }
 
     @Test
     fun testUserActive() {

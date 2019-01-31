@@ -10,6 +10,8 @@ import org.flowable.engine.impl.event.logger.EventFlusher
 import org.flowable.engine.impl.event.logger.EventLogger
 import org.flowable.engine.impl.persistence.entity.ExecutionEntityImpl
 import org.flowable.engine.runtime.ProcessInstance
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * Logs basic flowable events for test purposes.
@@ -20,6 +22,10 @@ class ProcessTestEnvironment: EventLogger(DefaultClockImpl(), ObjectMapper()) {
 
     var processInstance: ProcessInstance? = null
     var exception: Throwable? = null
+        set(value) {
+            logger.debug("Exception thrown", value)
+            field = value
+        }
 
     val events: List<Map<String, Any>> = mutableListOf()
 
@@ -32,6 +38,7 @@ class ProcessTestEnvironment: EventLogger(DefaultClockImpl(), ObjectMapper()) {
 
         @Suppress("UNCHECKED_CAST")
         override fun closing(commandContext: CommandContext?) {
+            // extract data from event handlers
             for (eventHandler in eventHandlers) {
                 val eventLogEntryEntity = eventHandler.generateEventLogEntry(commandContext)
                 val map = objectMapper.readValue(eventLogEntryEntity.data, HashMap::class.java) as HashMap<String, Any>
@@ -53,6 +60,10 @@ class ProcessTestEnvironment: EventLogger(DefaultClockImpl(), ObjectMapper()) {
     }
 
     companion object {
+
+        @JvmStatic val logger: Logger = LoggerFactory.getLogger(ProcessTestEnvironment::class.java)
+
         const val FIELD_TYPE = "TYPE"
+
     }
 }
