@@ -53,21 +53,21 @@ class BanUserProcessTest: BaseProcessTest() {
     }
 
     @Test
-    fun testUserActive() {
-        logger.debug("testUserActive()")
-        with (prepareEnvAndStartProcess(userIsActive = true)) {
-            assertActivityCompleted("isUserActiveCallActivity")
-            assertActivityCompleted("banUserTask")
-        }
-    }
-
-    @Test
     fun testUserInactive() {
         logger.debug("testUserInactive()")
         with (prepareEnvAndStartProcess(userIsActive = false)) {
             assertActivityCompleted("isUserActiveCallActivity")
             assertActivityNotStarted("banUserTask")
             assertBpmnError(BanUserServiceTask.ERR_USER_BAN)
+        }
+    }
+
+    @Test
+    fun testUserActive() {
+        logger.debug("testUserActive()")
+        with (prepareEnvAndStartProcess(userIsActive = true)) {
+            assertActivityCompleted("isUserActiveCallActivity")
+            assertActivityCompleted("banUserTask")
         }
     }
 
