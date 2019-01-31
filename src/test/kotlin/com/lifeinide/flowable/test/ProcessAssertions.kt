@@ -2,6 +2,7 @@ package com.lifeinide.flowable.test
 
 import org.assertj.core.api.Assertions.assertThat
 import org.flowable.common.engine.api.delegate.event.FlowableEngineEventType
+import org.flowable.engine.delegate.BpmnError
 import org.flowable.engine.impl.event.logger.handler.Fields
 import org.flowable.variable.service.impl.persistence.entity.VariableScopeImpl
 import kotlin.reflect.KClass
@@ -63,6 +64,18 @@ class ProcessAssertions(protected val processTestEnvironment: ProcessTestEnviron
             .withFailMessage("Process ended with exception: ${processTestEnvironment.exception!!.javaClass.simpleName} " +
                 "which is different than asserted: ${clazz.java.simpleName}")
             .isOfAnyClassIn(clazz.java)
+    }
+
+    /**
+     * Checks whether process ended with [BpmnError] with given error code.
+     */
+    fun assertBpmnError(code: String) {
+        assertException(BpmnError::class)
+
+        val thrownCode = (processTestEnvironment.exception as BpmnError).errorCode
+        assertThat(thrownCode)
+            .withFailMessage("Process ended with error with code: $thrownCode which is different than asserted: $code")
+            .isEqualTo(code)
     }
 
 }

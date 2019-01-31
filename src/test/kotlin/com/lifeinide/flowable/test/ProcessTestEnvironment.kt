@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.flowable.common.engine.api.delegate.event.FlowableEvent
 import org.flowable.common.engine.impl.interceptor.CommandContext
 import org.flowable.common.engine.impl.util.DefaultClockImpl
+import org.flowable.engine.delegate.BpmnError
 import org.flowable.engine.delegate.event.impl.FlowableProcessStartedEventImpl
 import org.flowable.engine.impl.event.logger.AbstractEventFlusher
 import org.flowable.engine.impl.event.logger.EventFlusher
@@ -23,7 +24,10 @@ class ProcessTestEnvironment: EventLogger(DefaultClockImpl(), ObjectMapper()) {
     var processInstance: ProcessInstance? = null
     var exception: Throwable? = null
         set(value) {
-            logger.debug("Exception thrown", value)
+            if (value is BpmnError)
+                logger.debug("Exception thrown: {}", (value as BpmnError).errorCode)
+            else
+                logger.debug("Exception thrown", value)
             field = value
         }
 

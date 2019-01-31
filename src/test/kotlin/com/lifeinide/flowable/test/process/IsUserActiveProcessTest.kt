@@ -5,7 +5,6 @@ import com.lifeinide.flowable.process.IsUserActiveServiceTask
 import com.lifeinide.flowable.service.UserService
 import com.lifeinide.flowable.test.BaseProcessTest
 import com.lifeinide.flowable.test.ProcessAssertions
-import org.flowable.common.engine.api.FlowableException
 import org.flowable.engine.test.mock.Mocks
 import org.junit.Test
 import org.mockito.ArgumentMatchers
@@ -46,7 +45,7 @@ class IsUserActiveProcessTest: BaseProcessTest() {
         with (prepareEnvAndStartProcess(userExists = false)) {
             assertActivityStarted("checkUserExists")
             assertActivityNotCompleted("checkUserExists")
-            assertException(FlowableException::class)
+            assertBpmnError(IsUserActiveServiceTask.ERR_USER_NOT_EXIST)
         }
     }
 

@@ -6,14 +6,14 @@ import org.flowable.common.engine.api.FlowableException
 import org.flowable.engine.delegate.BpmnError
 import org.flowable.engine.delegate.DelegateExecution
 import org.flowable.engine.impl.bpmn.behavior.ErrorEndEventActivityBehavior
-import org.flowable.engine.impl.bpmn.parser.factory.ActivityBehaviorFactory
+import org.flowable.engine.impl.bpmn.parser.factory.DefaultActivityBehaviorFactory
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 /**
  * @author Lukasz Frankowski
  */
-class TestActivityBehaviorFactory(wrappedActivityBehaviorFactory: ActivityBehaviorFactory): org.flowable.engine.test.TestActivityBehaviorFactory(wrappedActivityBehaviorFactory) {
+class TestActivityBehaviorFactory: DefaultActivityBehaviorFactory() {
 
     override fun createErrorEndEventActivityBehavior(endEvent: EndEvent?, errorEventDefinition: ErrorEventDefinition?): ErrorEndEventActivityBehavior {
         return object: ErrorEndEventActivityBehavior(errorEventDefinition?.errorCode) {
@@ -21,11 +21,11 @@ class TestActivityBehaviorFactory(wrappedActivityBehaviorFactory: ActivityBehavi
                 try {
                     super.execute(execution)
                 } catch (e: FlowableException) {
-                    errorEventDefinition?.errorCode.let {errorCode ->
+                    errorEventDefinition?.errorCode?.let {errorCode ->
                         logger.debug("Re-throwing BPMN error with code: {} on uncaught end event exception", errorCode)
                         throw BpmnError(errorCode)
                     }
-
+                    throw e
                 }
             }
         }

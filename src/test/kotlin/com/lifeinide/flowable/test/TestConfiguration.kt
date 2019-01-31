@@ -12,12 +12,19 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class TestConfiguration {
 
+    /** Custom activity behavior factory for tests **/
+    @Bean fun testActivityBehaviorFactory(): TestActivityBehaviorFactory = TestActivityBehaviorFactory()
+
     /** Flowable configuration bean */
     @Bean
-    fun flowableTestSpringProcessEngineConfig() = EngineConfigurationConfigurer<SpringProcessEngineConfiguration> {
+    fun flowableTestSpringProcessEngineConfig(testActivityBehaviorFactory: TestActivityBehaviorFactory) =
+            EngineConfigurationConfigurer<SpringProcessEngineConfiguration> {
 
         // register mock expression manager to make org.flowable.engine.test.mock.Mocks available for processes
         it.expressionManager = MockExpressionManager()
+
+        // registers custom activity behavior factory
+        it.activityBehaviorFactory = testActivityBehaviorFactory()
 
     }
 
