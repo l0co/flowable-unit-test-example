@@ -4,6 +4,7 @@ import com.lifeinide.flowable.model.User
 import com.lifeinide.flowable.process.IsUserActiveServiceTask
 import com.lifeinide.flowable.service.UserService
 import com.lifeinide.flowable.test.BaseProcessTest
+import com.lifeinide.flowable.test.MockedCallActivityResult
 import com.lifeinide.flowable.test.ProcessAssertions
 import org.flowable.engine.test.mock.Mocks
 import org.junit.Test
@@ -70,7 +71,16 @@ class IsUserActiveProcessTest: BaseProcessTest() {
     }
 
     companion object {
+
         @JvmStatic val logger: Logger = LoggerFactory.getLogger(IsUserActiveProcessTest::class.java)
+
+        @JvmStatic fun mock(userExists: Boolean = true, userIsActive: Boolean = true): MockedCallActivityResult {
+            return if (!userExists)
+                MockedCallActivityResult.ExceptionCallActivityResult(IsUserActiveServiceTask.ERR_USER_NOT_EXIST)
+            else
+                MockedCallActivityResult.VariableSetCallActivityResult(IsUserActiveServiceTask.VAR_RESULT to userIsActive)
+        }
+
     }
 
 }

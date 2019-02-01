@@ -2,13 +2,11 @@ package com.lifeinide.flowable.test.process
 
 import com.lifeinide.flowable.model.User
 import com.lifeinide.flowable.process.BanUserServiceTask
-import com.lifeinide.flowable.process.IsUserActiveServiceTask
 import com.lifeinide.flowable.service.UserService
 import com.lifeinide.flowable.test.BaseProcessTest
 import com.lifeinide.flowable.test.ProcessAssertions
 import org.flowable.engine.test.mock.Mocks
 import org.junit.Test
-import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -24,22 +22,12 @@ class BanUserProcessTest: BaseProcessTest() {
         val mockUserService = mock(UserService::class.java)
         val mockUser = User()
 
-        if (userExists) {
-
-            `when`(mockUserService.findUser(mockUser.id)).thenReturn(mockUser)
-            `when`(mockUserService.isBanned(mockUser)).thenReturn(!userIsActive)
-
-        } else {
-
-            `when`(mockUserService.findUser(ArgumentMatchers.anyString())).thenReturn(null)
-
-        }
-
+        `when`(mockUserService.findUser(mockUser.id)).thenReturn(mockUser)
         doNothing().`when`(mockUserService).ban(mockUser)
 
         Mocks.register(BanUserServiceTask.BEAN_NAME, BanUserServiceTask(mockUserService))
-        Mocks.register(IsUserActiveServiceTask.BEAN_NAME, IsUserActiveServiceTask(mockUserService))
-        return startProcess(mapOf(BanUserServiceTask.VAR_USER_ID to mockUser.id))
+        return startProcess(mapOf(BanUserServiceTask.VAR_USER_ID to mockUser.id),
+            "isUserActiveCallActivity" to IsUserActiveProcessTest.mock(userExists, userIsActive))
     }
 
     @Test

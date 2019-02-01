@@ -18,14 +18,16 @@ import org.springframework.test.context.junit4.SpringRunner
 abstract class BaseProcessTest {
 
     @Autowired protected lateinit var runtimeService: RuntimeService
+    @Autowired protected lateinit var testActivityBehaviorFactory: TestActivityBehaviorFactory
 
     abstract fun processName(): String
 
-    fun startProcess(variables: Map<String, Any> = mapOf()): ProcessAssertions {
+    fun startProcess(variables: Map<String, Any> = mapOf(), vararg mockedCallActivities: Pair<String, MockedCallActivityResult>): ProcessAssertions {
         logger.debug("Starting process: ${processName()}")
 
         val processTestEnvironment = ProcessTestEnvironment()
         runtimeService.addEventListener(processTestEnvironment)
+        testActivityBehaviorFactory.registerMockedCallActivityResults(*mockedCallActivities)
 
         try {
             runtimeService.startProcessInstanceByKey(processName(), variables)
@@ -33,6 +35,7 @@ abstract class BaseProcessTest {
             processTestEnvironment.exception = e
         } finally {
             runtimeService.removeEventListener(processTestEnvironment)
+            testActivityBehaviorFactory.unregisterMockedCallActivityResults()
         }
 
         return ProcessAssertions(processTestEnvironment)
