@@ -25,7 +25,7 @@ class ProcessTestEnvironment: EventLogger(DefaultClockImpl(), ObjectMapper()) {
     var exception: Throwable? = null
         set(value) {
             if (value is BpmnError)
-                logger.debug("Exception thrown: {}", (value as BpmnError).errorCode)
+                logger.debug("Exception thrown: {}", value.errorCode)
             else
                 logger.debug("Exception thrown", value)
             field = value

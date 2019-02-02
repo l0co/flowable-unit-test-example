@@ -1,3 +1,11 @@
 # Flowable unit test example
 
-This project shows how to unit test [Flowable](https://www.flowable.org/) processes.
+Backing source code for [Testing Flowable processes](http://lifeinide.com/post/2019-01-21-testing-flowable-processes/) article.
+
+## How to run
+
+Run all tests mentioned in article using:
+
+```
+./gradlew clean test --info
+```
